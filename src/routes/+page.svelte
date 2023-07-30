@@ -12,7 +12,8 @@
 	function addTodo() {
 		todoList.push({
 			task: inputTask,
-			id: currId.toString()
+			isDone: false,
+			id: currId.toString(),
 		});
 		currId++;
 		todoList = todoList;
