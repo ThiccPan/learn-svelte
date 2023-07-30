@@ -43,7 +43,7 @@
 
 <h1>Simple todo app</h1>
 <form method="post" on:submit|preventDefault={() => addTodo()}>
-	<input type="text" bind:value={inputTask} />
+	<input type="text" bind:value={inputTask} required/>
 	<button type="submit">add</button>
 </form>
 <button on:click={saveToStorage}>save</button>
