@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { json } from '@sveltejs/kit';
+	import { onMount } from 'svelte';
+	export const ssr = false;
 	import TodoItem from '../components/TodoItem.svelte';
 	import type { Todo } from '../global';
 	import { todoStore } from '../store/store';
 
 	let todoList: Todo[] = [];
-	let currId: number = 0;
+	$: currId = 0;
 	let inputTask: string = '';
 
 	function addTodo() {
@@ -23,7 +24,19 @@
 	}
 
 	function saveToStorage() {
-		localStorage.setItem("data", JSON.stringify(todoList))
+		localStorage.setItem('data', JSON.stringify(todoList));
+	}
+
+	onMount(loadData)
+
+	function loadData() {
+		let data = localStorage.getItem('data');
+		if (typeof data === "string") {
+			let parsed = JSON.parse(data)
+			todoList = parsed!
+			currId = parseInt(todoList[todoList.length-1].id)
+			console.log(todoList)
+		}
 	}
 </script>
 
@@ -31,8 +44,9 @@
 <form method="post" on:submit|preventDefault={() => addTodo()}>
 	<input type="text" bind:value={inputTask} />
 	<button type="submit">add</button>
-	<button on:click={saveToStorage}>save to local storage</button>
 </form>
+<button on:click={saveToStorage}>save</button>
+<button on:click={loadData}>load</button>
 
 <h2>List of todo</h2>
 <ul>
